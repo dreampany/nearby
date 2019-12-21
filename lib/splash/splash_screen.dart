@@ -18,6 +18,13 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
   AnimationController controller;
   Animation<double> animation;
 
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
      return null;
