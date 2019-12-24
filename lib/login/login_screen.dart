@@ -102,7 +102,9 @@ Widget getLoginUi(
 
 void save(GlobalKey<FormState> key, BuildContext context) {
   if (key.currentState.validate()) {
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('Processing Data')));
+    Scaffold.of(context).showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        content: Text('Processing Data')));
+    BlocProvider.of<LoginBloc>(context).loginOnName();
   }
 }

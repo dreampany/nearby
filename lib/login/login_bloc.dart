@@ -2,6 +2,7 @@ import 'package:nearby/login/login_event.dart';
 import 'package:nearby/login/login_screen.dart';
 import 'package:nearby/login/login_state.dart';
 import 'package:bloc/bloc.dart';
+import 'package:nearby/misc/constants.dart' as Constants;
 
 /**
  * Created by roman on 2019-12-23
@@ -29,5 +30,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void setAuthListener(LoginWidget widget) {
 
+  }
+
+  void loginOnName() async {
+    Constants.logger.d("LOGIN loginOnGoogle");
+    add(LoginEventInProgress());
+    /*final google = GoogleSignIn(scopes: [Constants.Keys.PROFILE, Constants.Keys.EMAIL]);
+    final account = await google.signIn();
+    if (account == null) {
+      Constants.logger.d("LOGIN Account Not Found");
+      add(LogoutEvent());
+    } else {
+      Constants.logger.d("LOGIN Account " + account.displayName);
+      LoginRepo.of().signInWithGoogle(account);
+    }*/
   }
 }
