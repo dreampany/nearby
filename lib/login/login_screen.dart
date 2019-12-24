@@ -18,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+  final TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +33,12 @@ class LoginWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final LoginScreen screen;
   final LoginScreenState state;
+  final TextEditingController nameController;
 
   const LoginWidget(
       {Key key,
       @required this.formKey,
+      @required this.nameController,
       @required this.screen,
       @required this.state})
       : super(key: key);
@@ -49,14 +52,14 @@ class LoginWidget extends StatelessWidget {
       body: BlocBuilder(
         bloc: BlocProvider.of<LoginBloc>(context),
         builder: (context, LoginState state) =>
-            getLoginUi(formKey, context, state),
+            getLoginUi(formKey, nameController, context, state),
       ),
     );
   }
 }
 
 Widget getLoginUi(
-    GlobalKey<FormState> formKey, BuildContext context, LoginState state) {
+    GlobalKey<FormState> formKey, TextEditingController nameController, BuildContext context, LoginState state) {
   if (state.loading)
     return Center(
       child: CircularProgressIndicator(
@@ -76,6 +79,7 @@ Widget getLoginUi(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
+                  controller: nameController,
                   decoration: InputDecoration(labelText: 'Enter your username'),
                   validator: (value) {
                     if (value.isEmpty) return 'Please enter username';
@@ -86,9 +90,9 @@ Widget getLoginUi(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: RaisedButton(
                     onPressed: () {
-                      save(formKey, context);
+                      login(formKey, context);
                     },
-                    child: Text('Save'),
+                    child: Text('Login with name'),
                   ),
                 )
               ],
@@ -100,11 +104,11 @@ Widget getLoginUi(
   );
 }
 
-void save(GlobalKey<FormState> key, BuildContext context) {
+void login(GlobalKey<FormState> key, BuildContext context) {
   if (key.currentState.validate()) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-        duration: Duration(seconds: 2),
-        content: Text('Processing Data')));
-    BlocProvider.of<LoginBloc>(context).loginOnName();
+    Scaffold.of(context).showSnackBar(
+        SnackBar(duration: Duration(seconds: 2), content: Text('Login...')));
+
+    BlocProvider.of<LoginBloc>(context).loginOnUser();
   }
 }

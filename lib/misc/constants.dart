@@ -1,6 +1,9 @@
 library Constants;
 
+import 'package:device_info/device_info.dart';
+import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+
 /**
  * Created by roman on 2019-12-21
  * Copyright (c) 2019 bjit. All rights reserved.
@@ -20,7 +23,7 @@ class Common extends Sep {
   static const int INT = 0;
   static const double DOUBLE = 0.0;
   static const String ID = 'id';
-  static const String TIMESTAMP = 'timestamp';
+  static const String TIME = 'time';
 }
 
 class Screen {
@@ -52,10 +55,10 @@ class ErrorMessages {
 
 class Keys extends Common {
   static const String ID = Common.ID;
+  static const String TIME = Common.TIME;
   static const String NAME = 'name';
   static const String PHOTO_URL = 'photo_url';
   static const String TOKEN = 'token';
-  static const String TIMESTAMP = Common.TIMESTAMP;
   static const String CHAT = 'chat';
   static const String USERS = 'users';
   static const String ROOMS = 'rooms';
@@ -71,6 +74,19 @@ class Keys extends Common {
 }
 
 class Api {
+
+  static Future<String> getId(BuildContext context) async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      AndroidDeviceInfo info = await deviceInfo.androidInfo;
+      return info.androidId;
+    } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+      IosDeviceInfo info = await deviceInfo.iosInfo;
+      return info.identifierForVendor;
+    } else {
+      return Common.EMPTY;
+    }
+  }
 /*  static List<String> toIds(List<User> users) {
     List<String> ids = List<String>();
     users.forEach((user) {

@@ -27,6 +27,7 @@ dependencies:
   flutter_bloc:
   shared_preferences:
   json_annotation:
+  device_info:
 
 dev_dependencies:
   flutter_test:

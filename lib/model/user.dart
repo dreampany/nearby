@@ -10,9 +10,9 @@ part 'user.g.dart';
 class User {
   final String id;
   final String name;
-  final int timestamp;
+  final int time;
 
-  User(this.id, this.name, {this.timestamp});
+  User(this.id, this.name, {this.time});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:nearby/login/login_event.dart';
 import 'package:nearby/login/login_screen.dart';
 import 'package:nearby/login/login_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:nearby/misc/constants.dart' as Constants;
+import 'package:nearby/model/user.dart';
 
 /**
  * Created by roman on 2019-12-23
@@ -32,9 +34,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   }
 
-  void loginOnName() async {
+  void loginOnUser(BuildContext context, String name) async {
     Constants.logger.d("LOGIN loginOnGoogle");
     add(LoginEventInProgress());
+    final String id = await Constants.Api.getId(context);
+    final User user = User(id, name, time: DateTime.now().millisecondsSinceEpoch);
     /*final google = GoogleSignIn(scopes: [Constants.Keys.PROFILE, Constants.Keys.EMAIL]);
     final account = await google.signIn();
     if (account == null) {
