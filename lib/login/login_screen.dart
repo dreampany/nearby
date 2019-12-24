@@ -23,7 +23,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(),
-      child: LoginWidget(screen: widget, state: this),
+      child: LoginWidget(formKey: formKey, screen: widget, state: this),
     );
   }
 }
@@ -49,14 +49,14 @@ class LoginWidget extends StatelessWidget {
       body: BlocBuilder(
         bloc: BlocProvider.of<LoginBloc>(context),
         builder: (context, LoginState state) =>
-            getLoginUi(context, formKey, state),
+            getLoginUi(formKey, context, state),
       ),
     );
   }
 }
 
 Widget getLoginUi(
-    BuildContext context, GlobalKey<FormState> formKey, LoginState state) {
+    GlobalKey<FormState> formKey, BuildContext context, LoginState state) {
   if (state.loading)
     return Center(
       child: CircularProgressIndicator(
@@ -68,17 +68,41 @@ Widget getLoginUi(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Form(
-          key: formKey,
-          child: TextFormField(
-            decoration: InputDecoration(labelText: 'Enter your username'),
-            validator: (value) {
-              if (value.isEmpty) return 'Please enter username';
-              return null;
-            },
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Enter your username'),
+                  validator: (value) {
+                    if (value.isEmpty) return 'Please enter username';
+                    return null;
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: RaisedButton(
+                    onPressed: () {
+                      save(formKey, context);
+                    },
+                    child: Text('Save'),
+                  ),
+                )
+              ],
+            ),
           ),
-        )
+        ),
       ],
     ),
   );
+}
+
+void save(GlobalKey<FormState> key, BuildContext context) {
+  if (key.currentState.validate()) {
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text('Processing Data')));
+  }
 }
