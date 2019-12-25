@@ -90,7 +90,7 @@ Widget getLoginUi(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: RaisedButton(
                     onPressed: () {
-                      login(formKey, context);
+                      login(formKey, context, nameController);
                     },
                     child: Text('Login with name'),
                   ),
@@ -104,11 +104,11 @@ Widget getLoginUi(
   );
 }
 
-void login(GlobalKey<FormState> key, BuildContext context) {
+void login(GlobalKey<FormState> key, BuildContext context, TextEditingController controller) {
   if (key.currentState.validate()) {
     Scaffold.of(context).showSnackBar(
         SnackBar(duration: Duration(seconds: 2), content: Text('Login...')));
-
-    BlocProvider.of<LoginBloc>(context).loginOnUser();
+    String name = controller.text;
+    BlocProvider.of<LoginBloc>(context).loginOnUser(context, name);
   }
 }

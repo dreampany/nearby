@@ -5,6 +5,8 @@ import 'package:nearby/login/login_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:nearby/misc/constants.dart' as Constants;
 import 'package:nearby/model/user.dart';
+import 'package:nearby/repo/login_repo.dart';
+import 'package:nearby/repo/user_repo.dart';
 
 /**
  * Created by roman on 2019-12-23
@@ -39,6 +41,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     add(LoginEventInProgress());
     final String id = await Constants.Api.getId(context);
     final User user = User(id, name, time: DateTime.now().millisecondsSinceEpoch);
+    Constants.logger.d("LOGIN user " + user.name);
+    UserRepo.of().setCurrentUser(user);
+    LoginRepo.of().setLoggedIn(true);
+
     /*final google = GoogleSignIn(scopes: [Constants.Keys.PROFILE, Constants.Keys.EMAIL]);
     final account = await google.signIn();
     if (account == null) {
