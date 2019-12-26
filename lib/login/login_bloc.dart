@@ -32,11 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  void setAuthListener(LoginWidget widget) {
-
-  }
-
-  void loginOnUser(BuildContext context, String name) async {
+  void loginOnUser(BuildContext context, String name, void Function(bool) callback) async {
     Constants.logger.d("LOGIN loginOnGoogle");
     add(LoginEventInProgress());
     final String id = await Constants.Api.getId(context);
@@ -44,6 +40,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Constants.logger.d("LOGIN user " + user.name);
     UserRepo.of().setCurrentUser(user);
     LoginRepo.of().setLoggedIn(true);
+    callback(true);
 
     /*final google = GoogleSignIn(scopes: [Constants.Keys.PROFILE, Constants.Keys.EMAIL]);
     final account = await google.signIn();

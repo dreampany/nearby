@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nearby/login/login_bloc.dart';
 import 'package:nearby/login/login_state.dart';
+import 'package:nearby/misc/constants.dart' as Constants;
 
 /**
  * Created by roman on 2019-12-23
@@ -109,6 +110,12 @@ void login(GlobalKey<FormState> key, BuildContext context, TextEditingController
     Scaffold.of(context).showSnackBar(
         SnackBar(duration: Duration(seconds: 2), content: Text('Login...')));
     String name = controller.text;
-    BlocProvider.of<LoginBloc>(context).loginOnUser(context, name);
+    BlocProvider.of<LoginBloc>(context).loginOnUser(context, name, (success) {
+      if (success) {
+        Constants.logger.d("LOGIN SUCCESS");
+      } else {
+        Constants.logger.d("LOGIN FAILED");
+      }
+    });
   }
 }
