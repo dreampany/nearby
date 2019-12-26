@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nearby/login/login_bloc.dart';
 import 'package:nearby/login/login_state.dart';
 import 'package:nearby/misc/constants.dart' as Constants;
+import 'package:nearby/misc/navigators.dart';
 
 /**
  * Created by roman on 2019-12-23
@@ -57,65 +58,72 @@ class LoginWidget extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget getLoginUi(
-    GlobalKey<FormState> formKey, TextEditingController nameController, BuildContext context, LoginState state) {
-  if (state.loading)
+  Widget getLoginUi(
+      GlobalKey<FormState> formKey, TextEditingController nameController, BuildContext context, LoginState state) {
+    if (state.loading)
+      return Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 4.0,
+        ),
+      );
     return Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 4.0,
-      ),
-    );
-  return Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: 'Enter your username'),
-                  validator: (value) {
-                    if (value.isEmpty) return 'Please enter username';
-                    return null;
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      login(formKey, context, nameController);
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(labelText: 'Enter your username'),
+                    validator: (value) {
+                      if (value.isEmpty) return 'Please enter username';
+                      return null;
                     },
-                    child: Text('Login with name'),
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: RaisedButton(
+                      onPressed: () {
+                        login(formKey, context, nameController);
+                      },
+                      child: Text('Login with name'),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
-void login(GlobalKey<FormState> key, BuildContext context, TextEditingController controller) {
-  if (key.currentState.validate()) {
-    Scaffold.of(context).showSnackBar(
-        SnackBar(duration: Duration(seconds: 2), content: Text('Login...')));
-    String name = controller.text;
-    BlocProvider.of<LoginBloc>(context).loginOnUser(context, name, (success) {
-      if (success) {
-        Constants.logger.d("LOGIN SUCCESS");
-      } else {
-        Constants.logger.d("LOGIN FAILED");
-      }
-    });
+  void login(GlobalKey<FormState> key, BuildContext context, TextEditingController controller) {
+    if (key.currentState.validate()) {
+      Scaffold.of(context).showSnackBar(
+          SnackBar(duration: Duration(seconds: 2), content: Text('Login...')));
+      String name = controller.text;
+      BlocProvider.of<LoginBloc>(context).loginOnUser(context, name, (success) {
+        if (success) {
+          Constants.logger.d("LOGIN SUCCESS");
+
+        } else {
+          Constants.logger.d("LOGIN FAILED");
+        }
+      });
+    }
+  }
+
+  void goToHome() {
+    Navigators.goToHome(state.context);
   }
 }
+
+
