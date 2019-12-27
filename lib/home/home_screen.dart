@@ -22,6 +22,7 @@ class HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
       create: (context) => HomeBloc(),
+      child: HomeWidget(screen: widget, state: this),
     );
   }
 }
@@ -30,11 +31,15 @@ class HomeWidget extends StatelessWidget {
   final HomeScreen screen;
   final HomeScreenState state;
 
-  const HomeWidget({Key key, @required this.screen, @required this.state}) : super(key: key);
+  const HomeWidget({Key key, @required this.screen, @required this.state})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Nearby"),
+      ),
+    );
   }
 }

@@ -26,8 +26,14 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<LoginBloc>(
       create: (context) => LoginBloc(),
-      child: LoginWidget(formKey: formKey, screen: widget, state: this),
+      child: LoginWidget(formKey: formKey, nameController: nameController, screen: widget, state: this),
     );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
   }
 }
 
@@ -113,7 +119,7 @@ class LoginWidget extends StatelessWidget {
       BlocProvider.of<LoginBloc>(context).loginOnUser(context, name, (success) {
         if (success) {
           Constants.logger.d("LOGIN SUCCESS");
-
+          goToHome(context);
         } else {
           Constants.logger.d("LOGIN FAILED");
         }
@@ -121,8 +127,8 @@ class LoginWidget extends StatelessWidget {
     }
   }
 
-  void goToHome() {
-    Navigators.goToHome(state.context);
+  void goToHome(BuildContext context) {
+    Navigators.navigate(context, Constants.Screen.HOME);
   }
 }
 
