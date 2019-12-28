@@ -36,6 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Constants.logger.d("LOGIN loginOnGoogle");
     add(LoginEventInProgress());
     final String id = await Constants.Api.getId(context);
+    Constants.logger.d("LOGIN User ID "+ id);
     final User user = User(id, name, time: DateTime.now().millisecondsSinceEpoch);
     Constants.logger.d("LOGIN user " + user.name);
     UserRepo.of().setCurrentUser(user);

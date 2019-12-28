@@ -2,6 +2,8 @@ library Constants;
 
 import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get_version/get_version.dart';
 import 'package:logger/logger.dart';
 
 /**
@@ -74,6 +76,14 @@ class Keys extends Common {
 }
 
 class Api {
+
+  static Future<String> getAppId() async {
+    try {
+      return await GetVersion.appID;
+    } on PlatformException {
+      return null;
+    }
+  }
 
   static Future<String> getId(BuildContext context) async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
