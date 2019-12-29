@@ -11,12 +11,16 @@ import 'package:nearby/misc/constants.dart' as Constants;
  */
 class NearbyRepo {
   static NearbyRepo instance;
-
-  NearbyRepo._internal();
+  void Function(Peer peer) peerCallback;
+  List<Peer> peers;
 
   factory NearbyRepo.of() {
-    if (instance == null) instance = NearbyRepo._internal();
+    if (instance == null) instance = NearbyRepo._();
     return instance;
+  }
+
+  NearbyRepo._() {
+    peers = List();
   }
 
   void advertise(Peer peer) async {

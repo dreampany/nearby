@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nearby/home/home_bloc.dart';
+import 'package:nearby/home/home_state.dart';
 
 /**
  * Created by roman on 2019-12-26
@@ -39,6 +40,12 @@ class HomeWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Nearby"),
+      ),
+      body: BlocBuilder(
+        bloc: BlocProvider.of<HomeBloc>(context),
+          builder: (context, HomeState state) {
+
+          },
       ),
     );
   }
