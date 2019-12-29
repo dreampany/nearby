@@ -18,6 +18,7 @@ var logger = Logger(
 
 class Sep {
   static const String UNDERSCORE = '_';
+  static const String COMMA = ',';
 }
 
 class Common extends Sep {

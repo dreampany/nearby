@@ -24,14 +24,38 @@ class NearbyRepo {
     Constants.logger.d("NEARBY Service ID " + serviceId);
     await Nearby().startAdvertising(peer.name, Strategy.P2P_CLUSTER,
         serviceId: serviceId,
-        onConnectionInitiated: (endpointId, connectionInfo) =>
-            connectionInitiated(endpointId, connectionInfo),
+        onConnectionInitiated: connectionInitiated,
         onConnectionResult: null,
         onDisconnected: null);
   }
 
+  void discover(Peer peer) async {
+    await Nearby().startDiscovery(peer.name, Strategy.P2P_CLUSTER,
+        onEndpointFound: (endpointId, endpointName, serviceId) =>
+            endpointFound(peer, endpointId, endpointName, serviceId),
+        onEndpointLost: null);
+  }
+
   void connectionInitiated(
       String endpointId, ConnectionInfo connectionInfo) async {
+    await Nearby()
+        .acceptConnection(endpointId, onPayLoadRecieved: payloadRecieved);
+  }
 
+  void endpointFound(Peer peer, String endpointId, String endpointName,
+      String serviceId) async {
+    await Nearby().requestConnection(peer.name, endpointId,
+        onConnectionInitiated: connectionInitiated,
+        onConnectionResult: null,
+        onDisconnected: null);
+  }
+
+  void payloadRecieved(String endpointId, Payload payload) {
+    List<String> data =
+        String.fromCharCodes(payload.bytes).split(Constants.Sep.COMMA);
+    Constants.logger.d("NEARBY " + data.first);
+
+    switch (data[0]) {
+    }
   }
 }
